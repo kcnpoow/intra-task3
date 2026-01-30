@@ -1,61 +1,49 @@
 import http from "http";
 
-const hostname = "127.0.0.1";
-const port = 3000;
+const port = process.env.PORT || 3000;
+const hostname = "0.0.0.0";
 
 const calculateGcd = (a, b) => {
   let x = a;
   let y = b;
 
-  while (true) {
+  while (y !== 0n) {
     const remainder = x % y;
-
-    if (remainder == 0) {
-      break;
-    }
-
     x = y;
     y = remainder;
   }
 
-  return y;
+  return x;
 };
 
 const calculateLcm = (a, b) => {
-  const gcd = calculateGcd(a, b);
-
-  const result = (a * b) / gcd;
-
-  return result;
+  return (a * b) / calculateGcd(a, b);
 };
 
 const server = http.createServer((req, res) => {
   res.setHeader("Content-Type", "text/plain");
-  res.statusCode = 200;
 
-  const baseURL = `http://${hostname}`;
+  const baseURL = `http://localhost`;
   const url = new URL(req.url, baseURL);
-  const pathname = url.pathname;
 
-  if (pathname === "/kcnpoow@gmail.com") {
-    const xParam = url.searchParams.get("x");
-    const yParam = url.searchParams.get("y");
-
-    console.log(xParam, yParam);
-
+  if (url.pathname === "/kcnpoow@gmail.com") {
     try {
-      const x = BigInt(xParam);
-      const y = BigInt(yParam);
+      const x = BigInt(url.searchParams.get("x"));
+      const y = BigInt(url.searchParams.get("y"));
 
       const lcm = calculateLcm(x, y);
 
       res.end(lcm.toString());
-    } finally {
+    } catch {
       res.end(NaN);
     }
+    return;
   }
+
+  res.statusCode = 404;
+  res.end("Not found");
 });
 
 server.listen(port, hostname, () => {
-  console.log(`Server running at http://${hostname}:${port}/`);
+  console.log(`Server running on port ${port}`);
 });
