@@ -32,7 +32,7 @@ const server = http.createServer((req, res) => {
 
   console.log(url);
 
-  if (url.pathname === "/kcnpoow@gmail.com") {
+  if (url.pathname === "/kcnpoow_gmail_com") {
     try {
       const x = BigInt(url.searchParams.get("x"));
       const y = BigInt(url.searchParams.get("y"));
