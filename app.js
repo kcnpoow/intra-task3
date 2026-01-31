@@ -30,6 +30,8 @@ const server = http.createServer((req, res) => {
   const baseURL = `http://${req.headers.host}`;
   const url = new URL(req.url, baseURL);
 
+  console.log(url);
+
   if (url.pathname === "/kcnpoow@gmail.com") {
     try {
       const x = BigInt(url.searchParams.get("x"));
@@ -37,8 +39,10 @@ const server = http.createServer((req, res) => {
 
       const lcm = calculateLcm(x, y);
 
+      res.statusCode = 200;
       res.end(lcm.toString());
     } catch {
+      res.statusCode = 400;
       res.end(NaN.toString());
     }
 
