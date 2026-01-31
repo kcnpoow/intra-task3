@@ -17,13 +17,17 @@ const calculateGcd = (a, b) => {
 };
 
 const calculateLcm = (a, b) => {
-  return (a * b) / calculateGcd(a, b);
+  const gcd = calculateGcd(a, b);
+
+  const result = (a * b) / gcd;
+
+  return result;
 };
 
 const server = http.createServer((req, res) => {
   res.setHeader("Content-Type", "text/plain");
 
-  const baseURL = `http://localhost`;
+  const baseURL = `http://${req.headers.host}`;
   const url = new URL(req.url, baseURL);
 
   if (url.pathname === "/kcnpoow@gmail.com") {
@@ -35,8 +39,9 @@ const server = http.createServer((req, res) => {
 
       res.end(lcm.toString());
     } catch {
-      res.end(NaN);
+      res.end(NaN.toString());
     }
+
     return;
   }
 
